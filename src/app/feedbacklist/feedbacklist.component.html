@@ -1,0 +1,76 @@
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+      
+        <span>Welcome {{loggedUser | retrivename}}!</span>
+      <span class="menu-spacer"></span>
+      <div>
+        <a mat-button [routerLink]="'/empFeedback'"> New Feedback </a>
+        <a mat-button [routerLink]="'/feedbackList'"> List </a>
+      </div>
+    </mat-toolbar-row>
+  
+  </mat-toolbar>
+
+  <div class="list-container mat-elevation-z8">
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+
+    <!-- Project Column -->
+    <ng-container matColumnDef="project" sticky > 
+      <th mat-header-cell *matHeaderCellDef> Project </th>
+      <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+    </ng-container>
+  
+    <!-- Rating Column -->
+    <ng-container matColumnDef="ratings">
+      <th mat-header-cell *matHeaderCellDef> Rating </th>
+      <td mat-cell *matCellDef="let element">  <mat-star-rating  [rating]="element.ratings"  [starCount]="element.ratings" [color]="accent" ></mat-star-rating> </td>
+    </ng-container>
+  
+    <!-- Comment Column -->
+    <ng-container matColumnDef="comments">
+      <th mat-header-cell *matHeaderCellDef> Comments </th>
+      <td mat-cell *matCellDef="let element"> {{element.comments}} </td>
+    </ng-container>
+  
+   
+  <!-- Action Column -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef> Action </th>
+    <td mat-cell *matCellDef="let element" class="action-link"> 
+      <div class="action-button">
+        <button mat-raised-button   (click)="editData(dataSource.indexOf(element))">Edit</button>
+        <button mat-raised-button color="primary" (click)="deleteList(dataSource.indexOf(element))">Delete</button>
+      </div>
+    </td>
+  </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+<div *ngIf ="editMode">
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="editForm">
+  <!-- <mat-form-field appearance="fill">
+    <mat-label>Project</mat-label>
+    <select matNativeControl [(ngModel)]="editListData.project" formControlName="project" required>
+      <option value="Banking">Banking</option>
+      <option value="HealthCare">HealthCare</option>
+    </select>
+  </mat-form-field>
+  <mat-star-rating  [rating]="editListData.ratings"  [starCount]="starCount" [color]="starColor" (ratingUpdated)="onRatingChanged($event)"></mat-star-rating>
+  --> <mat-form-field class="full-width-input">
+    <textarea matInput type="text" [(ngModel)]="editListData.comments" placeholder="Comments" formControlName="comments" required></textarea>
+  </mat-form-field>
+  <div class="row">
+      <div class="col-xs-12 pull-right">
+        <button mat-raised-button 
+          class="btn btn-success" (click)="updateList(editListData, $index)">Update</button>
+      </div>
+    </div>
+  </form>
+    </mat-card-content>
+    </mat-card>
+</div>
